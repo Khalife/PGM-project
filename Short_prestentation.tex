@@ -1,0 +1,66 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}  
+\usepackage[T1]{fontenc} 
+\usepackage[top=1.5cm,bottom=1.5cm,left=1.3cm,right=1cm,asymmetric]{geometry}
+
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{array,multirow,makecell}
+\usepackage{cancel}
+\usepackage{subfig}
+\usepackage{wrapfig}
+\setcellgapes{1pt}
+\makegapedcells
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash }b{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }b{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}
+
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{1pt}
+\fancyhead[R]{\textit{Master MVA : Probabilistic graphical models}}
+\fancyfoot[L]{\textit{}}
+%\usepackage{unicode-math}
+%\setmathfont{XITS Math}
+%\setmathfont[version=setB,StylisticSet=1]{XITS Math}
+
+
+%\geometry{hmargin=1.5cm,vmargin=2cm}   
+
+\begin{document}
+\section*{Latent dirichlet allocation for label modelling}
+\section*{Thibaud Ehret \& Sammy Khalife}
+\begin{figure}[!h]
+\centering
+\captionsetup{justification=centering,margin=2cm}
+\includegraphics[width=15cm]{LDA.png}
+\caption{Graphical model associated to LDA model}
+\end{figure}
+
+
+\begin{eqnarray*}
+p(\textbf{w}|\alpha, \beta) &  = & \int p(\theta | \alpha, \beta)p(\textbf{w} | \alpha, \beta, \theta)d\theta\\
+\end{eqnarray*}
+In the LDA model, we have $ \theta \perp \beta$, and $p(w_{i} | \alpha, \beta, \theta) \perp p(w_{j} | \alpha, \beta, \theta)$  for $ i \neq j $
+\begin{eqnarray*}
+p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha) \prod_{n=1}^{N} p(\textbf{w}_{n} | \alpha, \beta, \theta)d\theta\\
+& = & \int  p(\theta |\alpha) \prod_{n=1}^{N}  \sum_{z_{n}}p(z_{n}|\alpha, \beta, \theta)p(\textbf{w}_{n} | \alpha, \beta, \theta, z_{n}) d\theta\\
+\end{eqnarray*}
+Moreover $z \perp (\alpha,\beta)$ and $\textbf{w}_{n} \perp (\alpha,\theta)$,
+\begin{eqnarray*}
+p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha)  \prod_{n=1}^{N}  \sum_{z_{n}}p(z_{n} |\theta)p(\textbf{w}_{n} | z_{n}, \beta) d\theta\\
+\end{eqnarray*}
+
+
+
+
+
+
+
+\end{document}
