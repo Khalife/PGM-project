@@ -22,6 +22,10 @@
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash }b{#1}}
 \newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}
 
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,fit}
+
 \pagestyle{fancy}
 \renewcommand{\footrulewidth}{1pt}
 \fancyhead[R]{\textit{Master MVA : Probabilistic graphical models}}
@@ -63,4 +67,8 @@ p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha)  \prod_{n=1}^{N}  \sum
 
 
 
+
+
+\section{The algorithm}
+\input{algorithm.tex}
 \end{document}

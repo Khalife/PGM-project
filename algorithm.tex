@@ -1,0 +1,34 @@
+We saw the complexity of the distribution associated to this model, therefore one can not simply calculate the posterior distribution for the inference and the parameter estimation. We will briefly present the algorithm used to calculate the inference and an approximation of the parameters. However, even if the distribution can not be computed, the algorithm is based on the EM principle.
+
+\subsection{Inference}
+
+The trick to be able to calculate the inference for the LDA model to calculate the variational inference which is a lower bound but easily calculable.
+
+The lower bound is computed using the simplified graphical model presented in figure \ref{low_bound_model} which does not have the coupling between $\theta$ and $\beta$ and $\textbf{w}$.
+
+The parameters $\gamma$ and $\phi$ for this new model are estimated by minimmizing the Kullback-Leibler divergence which has been shown to be good lower bound for the log-likelyhood. These are the parameters that we will use in the next part in order to estimate the parameters. 
+
+\subsection{Parameter estimation}
+
+We uses a modified version of the EM algorithm for this part. The expectation part, also called E-step, consists in computed the best variational parameters $\gamma$ and $\phi$ for the lower bound presented in the previous section. The maximization part, M-step, consists in optimizing the model parameter $\alpha$ and $\beta$ with the variational parameter fixed.
+Just like in the EM algorithm, both step are then iterated until the bound of the model \ref{low_bound_model} converges.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		semithick]
+		\tikzstyle{every state}=[fill=white,draw=black,text=black]
+		\node[state]         (A)                    {$\gamma$};
+		\node [state]        (B) [below of=A]       {$\theta$};
+		\node[state]         (C) [right of=A]       {$\phi$};
+		\node[state]         (D) [below of=C]       {$z$};
+		\node (B1) [draw=red, fit= (A) (B) (C) (D), inner sep=2cm] {};
+		\node (B2) [draw=red, fit= (D) (C), inner sep=1cm] {};
+		\node [yshift=3.0ex, black] at (B1.south) {$M$};
+		\node [yshift=3.0ex, black] at (B2.south) {$N$};
+		\path (A) edge              (B)
+	              (C) edge              (D);
+	\end{tikzpicture}
+	\caption{Graphical model used to calculate the lower bound of the log-likelyhood for the LDA graphical model}
+	\label{low_bound_model}
+\end{figure}
