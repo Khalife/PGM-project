@@ -68,27 +68,12 @@ Moreover $z \perp (\alpha,\beta)$ and $\textbf{w}_{n} \perp (\alpha,\theta)$, th
 p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha)  \prod_{n=1}^{N}  \sum_{z_{n}}p(z_{n} |\theta)p(\textbf{w}_{n} | z_{n}, \beta) d\theta\\
 \end{eqnarray*}
 
-<<<<<<< HEAD
 \section*{Inference and parameter estimation}
 Then the natural inferential problem that we need to solve in order to use LDA, is to compute :
 $$p(\theta, \textbf{z}|\textbf{w},\alpha,\beta)=\frac{p(\theta,\textbf{z},\textbf{w}|\alpha,\beta)}{p(\textbf{w}|\alpha,\beta)}$$
 Unfortunately, this expression is intractable due to the coupling between $\theta$ and $\beta$.
-Then, the following EM scheme is used to make an inference on parameters $\alpha$ and $\beta$ : ~\\
-~\\
--Get the tightest lower bound of the actual log-likelyhood among the simplified model :~\\
-\begin{figure}[!h]
-\centering
-\captionsetup{justification=centering,margin=2cm}
-\includegraphics[width=7cm]{EM}
-\caption{Approximation model for best lower bound approximation}
-\end{figure}
-~\\
--Parameter estimation of $\alpha$ and $\beta$ by maximizing the lower bound with respect to $\alpha$ and $\beta$~\\
+Then, an EM scheme is used to make an inference on parameters $\alpha$ and $\beta$. ~\\
 
-
-
-\end{document}
-=======
 \section{The algorithm}
 \input{algorithm.tex}
 \section{Experiments}
