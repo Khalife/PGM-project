@@ -1,0 +1,13 @@
+%% Taylor expansion for the log of the derivative of the Gamma function
+%% Inspired by the code of Blei
+
+function u = log_deriv_gamma(gamma)
+    gamma = gamma + 6 * ones(size(gamma));
+    u=ones(size(gamma)) ./ gamma.^2;
+    u=(((0.004166666666667*u-0.003968253986254*ones(size(u))).*u+ ...
+	0.008333333333333*ones(size(u))).*u-0.083333333333333*ones(size(u))).*u;
+    u=u + log(gamma)-0.5*ones(size(gamma)) ./ gamma - ones(size(gamma))./(gamma-1*ones(size(gamma))) - ...
+        ones(size(gamma)) ./ (gamma-2*ones(size(gamma))) -  ones(size(gamma))./(gamma-3*ones(size(gamma)))-...
+        ones(size(gamma))./(gamma-4*ones(size(gamma))) -ones(size(gamma))./(gamma-5*ones(size(gamma)))-...
+        ones(size(gamma))./(gamma-6*ones(size(gamma)));
+end
