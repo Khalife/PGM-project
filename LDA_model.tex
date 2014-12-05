@@ -1,0 +1,23 @@
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.3cm,
+		semithick]
+		\tikzstyle{every state}=[fill=white,draw=black,text=black]
+		\tikzstyle{final}=[circle, fill=black,draw=black,text=white]
+		\node[state]         (A)                    {$\alpha$};
+		\node[state]         (B) [right of=A]       {$\theta$};
+		\node[state]         (C) [right of=B]       {$z$};
+		\node[state]         (D) [above of=C]       {$\beta$};
+		\node[final]         (E) [right of=C]       {$\textbf{w}$};
+		\node (B1) [draw=red, fit= (E) (B) (C) , inner sep=2cm] {};
+		\node (B2) [draw=red, fit= (C) (E), inner sep=1cm] {};
+		\node [yshift=3.0ex, black] at (B1.south) {$M$};
+		\node [yshift=3.0ex, black] at (B2.south) {$N$};
+		\path (A) edge              (B)
+	              (C) edge              (E)
+	              (D) edge              (E)
+	              (B) edge              (C);
+	\end{tikzpicture}
+	\caption{LDA model}
+	\label{LDA_model}
+\end{figure}

@@ -22,6 +22,10 @@
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash }b{#1}}
 \newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}
 
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,fit}
+
 \pagestyle{fancy}
 \renewcommand{\footrulewidth}{1pt}
 \fancyhead[R]{\textit{Master MVA : Probabilistic graphical models}}
@@ -44,12 +48,17 @@
 \includegraphics[width=13cm]{LDA.png}
 \caption{Graphical model associated to Latent dirichlet association}
 \end{figure}
+<<<<<<< HEAD
 ~\\
 In the latent dirichlet model (LDA), there are different levels of representation of the object concerned (documents in our case). It differs from a simple multinomial model in the sense that each object can be associated with multiple topics. ~\\
 ~\\
 \textbf{Generation of documents}~\\
 ~\\
 The parameter $\theta$  which belongs to $\mathbb{R}^{d}$ is sampled once per document from a smooth distribution on the topic simplex, and represents the distribution of the topics within the document. $\theta$ is generated through a dirichlet distribution of parameter $\alpha$. We suppose that each word $\textbf{w}$ is generated through a multinomial probability conditionned on the topic : $\beta \in \mathbb{R}^{K*V}$, with $\beta_{ij}=p(w^{j}=1|z^{i}=1)$, V representing the number of possible words, and K the number of topics.
+=======
+\input{LDA_model.tex}
+
+>>>>>>> 9f92f90ffb2205fa1406249dd2ab7b278278ef30
 \begin{eqnarray*}
 p(\textbf{w}|\alpha, \beta) &  = & \int p(\theta | \alpha, \beta)p(\textbf{w} | \alpha, \beta, \theta)d\theta\\
 \end{eqnarray*}
@@ -63,6 +72,7 @@ Moreover $z \perp (\alpha,\beta)$ and $\textbf{w}_{n} \perp (\alpha,\theta)$, th
 p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha)  \prod_{n=1}^{N}  \sum_{z_{n}}p(z_{n} |\theta)p(\textbf{w}_{n} | z_{n}, \beta) d\theta\\
 \end{eqnarray*}
 
+<<<<<<< HEAD
 \section*{Inference and parameter estimation}
 Then the natural inferential problem that we need to solve in order to use LDA, is to compute :
 $$p(\theta, \textbf{z}|\textbf{w},\alpha,\beta)=\frac{p(\theta,\textbf{z},\textbf{w}|\alpha,\beta)}{p(\textbf{w}|\alpha,\beta)}$$
@@ -82,3 +92,10 @@ Then, the following EM scheme is used to make an inference on parameters $\alpha
 
 
 \end{document}
+=======
+\section{The algorithm}
+\input{algorithm.tex}
+\section{Experiments}
+\input{experiment.tex}
+\end{document}
+>>>>>>> 9f92f90ffb2205fa1406249dd2ab7b278278ef30
