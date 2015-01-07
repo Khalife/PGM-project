@@ -1,0 +1,59 @@
+We saw the complexity of the distribution associated to this model, therefore one can not simply calculate the posterior distribution for the inference and the parameter estimation. We will briefly present the algorithm used to calculate the inference and an approximation of the parameters. However, even if the distribution can not be computed, the algorithm is based on the EM principle.
+
+\subsection{Inference}
+
+The trick to be able to calculate the inference for the LDA model to calculate the variational inference which is a lower bound but easily calculable.
+
+The lower bound is computed using the simplified graphical model presented in figure \ref{low_bound_model} which does not have the coupling between $\theta$ and $\beta$ and $\textbf{w}$.
+
+The parameters $\gamma$ and $\phi$ for this new model are estimated by minimizing the Kullback-Leibler (KL) divergence which has been shown to be good lower bound for the log-likelihood. 
+Minimizing the KL-divergence gives us the two following equation for $\gamma$ and $\phi$:
+\[\phi_{ni} = \frac{1}{Z} \beta_{i w_n} exp\left( E[log(\theta_i | \gamma] \right)\]
+\[\gamma_i = \alpha_i + \sum_{n=1}^{N} \phi_{ni}\]
+
+As we can see the expression of $\gamma$ and $\phi$ depend from each other and we have to calculate the fix point for these equation. This is done using an algorithm which compute this fix point by iterating over the solution, the algorithm is presented in Algorithm \ref{algo1}. 
+
+
+ \begin{algorithm}[H]
+	 \KwData{Initial $\gamma$ and $\phi$}
+	 \KwResult{$\gamma$ and $\phi$ verifying the fix point equation}
+	 \Repeat{Covergence}{
+		 \For{all n and i}{
+		 	\[\phi_{ni} = \frac{1}{Z} \beta_{i w_n} exp\left( E[log(\theta_i | \gamma] \right)\]
+		 	\[\gamma_i = \alpha_i + \sum_{n=1}^{N} \phi_{ni}\]
+	 	}
+	 }
+ \caption{Algorithm computing the fix point for $\gamma$ and $\phi$}
+ \label{algo1}
+\end{algorithm}
+
+These are the parameters that we will use in the next part in order to estimate the parameters. 
+
+\subsection{Parameter estimation}
+
+The goal here is to compute the lower bound of the likelihood. For that, we use a modified version of the EM algorithm. 
+
+The expectation part of the algorithm consists in computed the best variational parameters $\gamma$ and $\phi$ for the simplified model presented in the previous section. 
+The maximization part consists in optimizing the model parameter $\alpha$ and $\beta$ with the variational parameter fixed. The optimization on $\alpha$ is done using an algorithm like Newton-Raphson to compute the optimal value whereas for $\beta$ we have a close form expression for the optimal value:
+\[\beta_{ij} = \sum_{d=1}^{M} \sum_{n=1}^{N_d} \phi_{ni} w_{dn}^j\]
+Just like in the EM algorithm, both step are then iterated until the lower bound of the loglikelihood converges.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
+		semithick]
+		\tikzstyle{every state}=[fill=white,draw=black,text=black]
+		\node[state]         (A)                    {$\gamma$};
+		\node [state]        (B) [below of=A]       {$\theta$};
+		\node[state]         (C) [right of=A]       {$\phi$};
+		\node[state]         (D) [below of=C]       {$z$};
+		\node (B1) [draw=red, fit= (A) (B) (C) (D), inner sep=2cm] {};
+		\node (B2) [draw=red, fit= (D) (C), inner sep=1cm] {};
+		\node [yshift=3.0ex, black] at (B1.south) {$M$};
+		\node [yshift=3.0ex, black] at (B2.south) {$N$};
+		\path (A) edge              (B)
+	              (C) edge              (D);
+	\end{tikzpicture}
+	\caption{Graphical model used to calculate the lower bound of the log-likelyhood for the LDA graphical model}
+	\label{low_bound_model}
+\end{figure}
