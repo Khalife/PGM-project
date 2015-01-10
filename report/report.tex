@@ -24,6 +24,7 @@
 \newcolumntype{C}[1]{>{\centering\arraybackslash }b{#1}}
 
 
+
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata,fit}
 
@@ -39,12 +40,22 @@
 %\geometry{hmargin=1.5cm,vmargin=2cm}   
 
 \begin{document}
+\begin{center}
 \section*{Latent dirichlet allocation for label modelling}
 \section*{Thibaud Ehret \& Sammy Khalife}
+\end{center}
 ~\\
-\section*{Introduction}
-Plouf
-\section{Presentation of the model [Journal of Machine Learning, 2003]}
+\section*{Introduction to document analysis}
+Eventhough the Latent dirichlet method can be used to a wider class of applications, the first one is document labelling. To see the improvments and contributions of the LDA, it is interesting for us to consider the history of document analysis methods.
+\begin{itemize}
+\item \textbf{Term Frequency-Inverse Document Frequency (tf-idf),}~\\ \textit{Salton and McGill, 1983}~\\
+This natural and basic method reduces the arbitrary length documents to a fixed length of numbers by counting their apparition in the document.~\\
+\item \textbf{Latent semantic indexing}, \textit{Deerwester et al., 1990}~\\
+This method is similar to principal component analysis. Uses decomposition of the tf-idf matrix. Preserving the most important semantic information~\\
+\item \textbf{Probabilistic Latent Semantic Indexing}, \textit{Hoffmann 1999}~\\
+Here, each word in a document is a sample from a mixture of multinomials. The document is represented as a list of mixing proportions. However, there is no providing of generative model, and the complexity is proportionnal to the size of the corpus.
+\end{itemize}
+\section*{1 Presentation of the model [Journal of Machine Learning, 2003]}
 \begin{figure}[!H]
 	\centering
 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.3cm,
@@ -69,15 +80,37 @@ Plouf
 	\label{LDA_model}
 \end{figure}
 ~\\
-In the latent dirichlet model (LDA), which a graphical representation is given in figure \ref{LDA_model}, there are different levels of representation of the object concerned (documents in our case). It differs from a simple multinomial model in the sense that each object can be associated with multiple topics. ~\\
+In the latent dirichlet model (LDA), which a graphical representation is given in figure \ref{LDA_model}, there are different levels of representation of the object concerned (documents in our case). It differs from a simple multinomial model since each document can be associated with multiple topics. ~\\
 ~\\
 \textbf{Generation of documents}~\\
 ~\\
-The parameter $\theta$  which belongs to $\mathbb{R}^{d}$ is sampled once per document from a smooth distribution on the topic simplex, and represents the distribution of the topics within the document. $\theta$ is generated through a dirichlet distribution of parameter $\alpha$. We suppose that each word $\textbf{w}$ is generated through a multinomial probability conditionned on the topic : $\beta \in \mathbb{R}^{K*V}$, with $\beta_{ij}=p(w^{j}=1|z^{i}=1)$, V representing the number of possible words, and K the number of topics.
-
+The parameter $\theta$  which belongs to $\mathbb{R}^{d}$ is sampled once per document from a smooth distribution on the topic simplex, and represents the distribution of the topics within the document. $\theta$ is generated through a dirichlet distribution of parameter $\alpha$. We suppose that each word $\textbf{w}$ is generated through a multinomial probability conditionned on the topic : $\beta \in \mathbb{R}^{K*V}$, with $\beta_{ij}=p(w^{j}=1|z^{i}=1)$, V representing the number of possible words, and K the number of topics.~\\
+~\\
+The fundamental theorical result which justifies this representation is De Finetii's theorem that we will admit. We here suppose that the sequence of words is infinitely exchangeable (i.e that every finite subsequence is exchangeable) which allows us to represent the distribution $p(w,z)$ with a random parameter $\theta$ of a multinomial over topics :
+\begin{eqnarray*}
+p(\textbf{w},z)=\int p(\theta)(\prod_{n=1}^{N}p(z_{n} | \theta)p(w_{n}|z_{n}))d\theta
+\end{eqnarray*}
+~\\
+\textbf{Example}~\\
+~\\
+To understand the model, let us consider the example of 3 words and 4 topics.
+Then, the (V-1) simplex $\{\theta \in \mathbb{R}^{3}, \sum_{i}\theta_{i}=1\}$  is included in $\mathbb{R}^{2}$ and can be seen as a 2D-triangle, in which the parameter $\theta$ belongs. Through $\theta$, this simplex represents all possible distributions $p(w|\theta,\beta)$ over the three words.~\\
+~\\
+The surface represented over the triangle is an example of distribution over the simplex :
+\begin{eqnarray*}
+p(\theta | \alpha)=\frac{\Gamma(\sum_{i=1}^{k}\alpha_{i})}{\prod_{i=1}^{k}\Gamma(\alpha_{i})}\theta_{1}^{\alpha_{1}-1}...\theta_{k}^{\alpha_{k}-1}
+\end{eqnarray*}
+We can interpret each of the vertices of the triangle corresponds to a deterministic distribution that assigns probability one to one of the words, and the midpoint of an edge as a probability which gives 0.5 to two of the words, and the centroid of the triangle is the uniform distribution over all three words. The four points marked with an x are the locations of the multinomial distributions $p(w | z)$ for each of the four topics.
+\begin{figure}[!H]
+\centering
+\includegraphics[width=8cm]{Simplex}
+\caption{2D-simplex representation of the example}
+\end{figure}
 \begin{eqnarray*}
 p(\textbf{w}|\alpha, \beta) &  = & \int p(\theta | \alpha, \beta)p(\textbf{w} | \alpha, \beta, \theta)d\theta\\
 \end{eqnarray*}
+\textbf{Details concerning the model and equations for inference}~\\
+~\\
 In the LDA model, we have $ \theta \perp \beta$, and $p(w_{i} | \alpha, \beta, \theta) \perp p(w_{j} | \alpha, \beta, \theta)$  for $ i \neq j $
 \begin{eqnarray*}
 p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha) \prod_{n=1}^{N} p(\textbf{w}_{n} | \alpha, \beta, \theta)d\theta\\
@@ -87,14 +120,12 @@ Moreover $z \perp (\alpha,\beta)$ and $\textbf{w}_{n} \perp (\alpha,\theta)$, th
 \begin{eqnarray*}
 p(\textbf{w}|\alpha, \beta) & = & \int p(\theta | \alpha)  \prod_{n=1}^{N}  \sum_{z_{n}}p(z_{n} |\theta)p(\textbf{w}_{n} | z_{n}, \beta) d\theta\\
 \end{eqnarray*}
-
-\section{Inference and parameter estimation}
 Then the natural inferential problem that we need to solve in order to use LDA, is to compute :
 $$p(\theta, \textbf{z}|\textbf{w},\alpha,\beta)=\frac{p(\theta,\textbf{z},\textbf{w}|\alpha,\beta)}{p(\textbf{w}|\alpha,\beta)}$$
 Unfortunately, this expression is intractable due to the coupling between $\theta$ and $\beta$.
 This is reason of the specific approximation algorithm presented in the next part. ~\\
 
-\section{The algorithm in practice}
+\section*{2 The algorithm in practice}
 \input{algorithm.tex}
 \section{Experiments}
 \input{experiment.tex}
