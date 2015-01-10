@@ -13,9 +13,10 @@
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage{array,multirow,makecell}
-\usepackage{cancel}
+%\usepackage{cancel}
 \usepackage{subfig}
-\usepackage{wrapfig}
+\usepackage{float}
+%\usepackage{wrapfig}
 \usepackage[]{algorithm2e}
 \setcellgapes{1pt}
 \makegapedcells
@@ -55,7 +56,7 @@ This method is similar to principal component analysis. Uses decomposition of th
 \item \textbf{Probabilistic Latent Semantic Indexing}, \textit{Hoffmann 1999}~\\
 Here, each word in a document is a sample from a mixture of multinomials. The document is represented as a list of mixing proportions. However, there is no providing of generative model, and the complexity is proportionnal to the size of the corpus.
 \end{itemize}
-\section*{1 Presentation of the model [Journal of Machine Learning, 2003]}
+\section{Presentation of the model [Journal of Machine Learning, 2003]}
 \begin{figure}[!H]
 	\centering
 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.3cm,
@@ -94,16 +95,16 @@ p(\textbf{w},z)=\int p(\theta)(\prod_{n=1}^{N}p(z_{n} | \theta)p(w_{n}|z_{n}))d\
 \textbf{Example}~\\
 ~\\
 To understand the model, let us consider the example of 3 words and 4 topics.
-Then, the (V-1) simplex $\{\theta \in \mathbb{R}^{3}, \sum_{i}\theta_{i}=1\}$  is included in $\mathbb{R}^{2}$ and can be seen as a 2D-triangle, in which the parameter $\theta$ belongs. Through $\theta$, this simplex represents all possible distributions $p(w|\theta,\beta)$ over the three words.~\\
+Then, the (V-1) simplex $\{\theta \in \mathbb{R}^{3}, \sum_{i}\theta_{i}=1\}$  is included in $\mathbb{R}^{2}$ and can be seen as a 2D-triangle, in which the parameter $\theta$ belongs. Through $\theta$, this simplex represents all possible distributions $p(w|\theta,\beta)$ over the three words. This is represented in the \textbf{figure 2}.~\\
 ~\\
 The surface represented over the triangle is an example of distribution over the simplex :
 \begin{eqnarray*}
 p(\theta | \alpha)=\frac{\Gamma(\sum_{i=1}^{k}\alpha_{i})}{\prod_{i=1}^{k}\Gamma(\alpha_{i})}\theta_{1}^{\alpha_{1}-1}...\theta_{k}^{\alpha_{k}-1}
 \end{eqnarray*}
 We can interpret each of the vertices of the triangle corresponds to a deterministic distribution that assigns probability one to one of the words, and the midpoint of an edge as a probability which gives 0.5 to two of the words, and the centroid of the triangle is the uniform distribution over all three words. The four points marked with an x are the locations of the multinomial distributions $p(w | z)$ for each of the four topics.
-\begin{figure}[!H]
+\begin{figure}[!h]
 \centering
-\includegraphics[width=8cm]{Simplex}
+\includegraphics[width=11cm]{Simplex}
 \caption{2D-simplex representation of the example}
 \end{figure}
 \begin{eqnarray*}
@@ -125,7 +126,7 @@ $$p(\theta, \textbf{z}|\textbf{w},\alpha,\beta)=\frac{p(\theta,\textbf{z},\textb
 Unfortunately, this expression is intractable due to the coupling between $\theta$ and $\beta$.
 This is reason of the specific approximation algorithm presented in the next part. ~\\
 
-\section*{2 The algorithm in practice}
+\section{The algorithm in practice}
 \input{algorithm.tex}
 \section{Experiments}
 \input{experiment.tex}
